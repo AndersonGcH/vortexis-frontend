@@ -8,6 +8,7 @@ import { DashboardVendedor } from './pages/dashboard-vendedor/dashboard-vendedor
 
 import { DashboardAlmacenero } from './pages/dashboard-almacenero/dashboard-almacenero';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { Categorias } from './pages/categorias/categorias';
 
 export const routes: Routes = [
 
@@ -26,11 +27,16 @@ export const routes: Routes = [
   path:'',
   component: MainLayout,
   children:[
-    {
-      path:'dashboard-admin',
-      component: DashboardAdminComponent
-    }
-  ]
+      {
+        path: 'dashboard-admin',
+        component: DashboardAdminComponent
+      },
+      // 2️⃣ AGREGA ESTA LÍNEA AQUÍ ADENTRO 🔥
+      {
+        path: 'categorias',
+        component: Categorias // Coloca el nombre exacto de la clase de tu archivo categorias.ts
+      }
+    ]
 },
 
   {
