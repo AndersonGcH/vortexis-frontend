@@ -1,0 +1,135 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4">
+    Dashboard Administrador
+  </h2>
+
+  <div class="row g-3">
+
+    <div class="col-md-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body text-center">
+
+          <h6>Ventas</h6>
+
+          <h3>
+            {{ dashboard?.cantidadVentas }}
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body text-center">
+
+          <h6>Ingresos</h6>
+
+          <h3>
+
+            S/ {{ dashboard?.totalVentas }}
+
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body text-center">
+
+          <h6>Productos</h6>
+
+          <h3>
+
+            {{ dashboard?.totalProductos }}
+
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body text-center">
+
+          <h6>Stock Bajo</h6>
+
+          <h3>
+
+            {{ dashboard?.productosStockBajo }}
+
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card mt-4 shadow-sm">
+
+    <div class="card-header">
+
+      Productos Más Vendidos
+
+    </div>
+
+    <div class="card-body">
+
+      <table class="table table-striped">
+
+        <thead>
+
+          <tr>
+
+            <th>Producto</th>
+
+            <th>Cantidad Vendida</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for (producto of dashboard?.topProductos; track producto.producto) {
+
+            <tr>
+
+              <td>{{ producto.producto }}</td>
+
+              <td>{{ producto.cantidadVendida }}</td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
