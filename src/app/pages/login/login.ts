@@ -22,68 +22,34 @@ export class Login {
     private router: Router
   ) {}
 
-  iniciarSesion() {
-
+iniciarSesion() {
     this.authService.login({
-
       email: this.email,
-
       password: this.password
-
     }).subscribe({
-
       next: (response) => {
+        
 
-        this.authService.guardarToken(
-          response.token
-        );
+        localStorage.removeItem('token'); 
 
-        this.authService.guardarRol(
-          response.rol
-        );
+        this.authService.guardarToken(response.token);
+        this.authService.guardarRol(response.rol);
 
         if(response.rol === 'ADMIN') {
-
-          this.router.navigate([
-            '/dashboard-admin'
-          ]);
-
+          this.router.navigate(['/dashboard-admin']);
         }
-
-        else if(
-          response.rol === 'VENDEDOR'
-        ) {
-
-          this.router.navigate([
-            '/dashboard-vendedor'
-          ]);
-
+        else if(response.rol === 'VENDEDOR') {
+          this.router.navigate(['/dashboard-vendedor']);
         }
-
-        else if(
-          response.rol === 'ALMACENERO'
-        ) {
-
-          this.router.navigate([
-            '/dashboard-almacenero'
-          ]);
-
+        else if(response.rol === 'ALMACENERO') {
+          this.router.navigate(['/dashboard-almacenero']);
         }
-
       },
-
       error: (error) => {
-
-        alert(
-          'Correo o contraseña incorrectos'
-        );
-
+        alert('Correo o contraseña incorrectos');
         console.error(error);
-
       }
-
     });
-
   }
 
 }

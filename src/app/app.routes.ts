@@ -9,6 +9,7 @@ import { DashboardVendedor } from './pages/dashboard-vendedor/dashboard-vendedor
 import { DashboardAlmacenero } from './pages/dashboard-almacenero/dashboard-almacenero';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { Categorias } from './pages/categorias/categorias';
+import { Productos } from './pages/productos/productos';
 
 export const routes: Routes = [
 
@@ -35,6 +36,10 @@ export const routes: Routes = [
       {
         path: 'categorias',
         component: Categorias // Coloca el nombre exacto de la clase de tu archivo categorias.ts
+      },
+            {
+        path: 'productos',
+        component: Productos // Coloca el nombre exacto de la clase de tu archivo productos.ts
       }
     ]
 },
