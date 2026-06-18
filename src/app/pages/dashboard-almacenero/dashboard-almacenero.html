@@ -1,1 +1,112 @@
-<p>dashboard-almacenero works!</p>
+<div class="container mt-4">
+
+  <h2>
+
+    Dashboard Almacenero
+
+  </h2>
+
+  <div class="row mt-4">
+
+    <div class="col-md-4">
+
+      <div
+        class="card border-danger">
+
+        <div class="card-body text-center">
+
+          <h5>
+
+            Productos Críticos
+
+          </h5>
+
+          <h2>
+
+            {{ cantidadStockBajo }}
+
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card mt-4">
+
+    <div class="card-header">
+
+      Productos con Stock Bajo
+
+    </div>
+
+    <div class="card-body">
+
+      <table
+        class="table table-striped">
+
+        <thead>
+
+          <tr>
+
+            <th>ID</th>
+
+            <th>Producto</th>
+
+            <th>Stock</th>
+
+            <th>Mínimo</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for(
+            producto of productosCriticos;
+            track producto.id
+          ) {
+
+          <tr class="table-danger">
+
+            <td>
+
+              {{ producto.id }}
+
+            </td>
+
+            <td>
+
+              {{ producto.nombre }}
+
+            </td>
+
+            <td>
+
+              {{ producto.stock }}
+
+            </td>
+
+            <td>
+
+              {{ producto.stockMinimo }}
+
+            </td>
+
+          </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

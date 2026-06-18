@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DashboardAlmacenero } from './dashboard-almacenero';
+import { DashboardAlmaceneroComponent } from './dashboard-almacenero';
 
 describe('DashboardAlmacenero', () => {
-  let component: DashboardAlmacenero;
-  let fixture: ComponentFixture<DashboardAlmacenero>;
+  let component: DashboardAlmaceneroComponent;
+  let fixture: ComponentFixture<DashboardAlmaceneroComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardAlmacenero],
+      imports: [DashboardAlmaceneroComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardAlmacenero);
+    fixture = TestBed.createComponent(DashboardAlmaceneroComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

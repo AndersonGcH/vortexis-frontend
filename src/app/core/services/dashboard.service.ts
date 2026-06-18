@@ -24,4 +24,21 @@ export class DashboardService {
 
   }
 
+  obtenerStockBajo() {
+
+  return this.http.get<number>(
+    `${this.apiUrl}/almacenero/stock-bajo`
+  );
+
+}
+
+obtenerProductosCriticos() {
+
+  return this.http.get<any[]>(
+    `${this.apiUrl}/almacenero/productos-criticos`
+  );
+
+}
+
+
 }
