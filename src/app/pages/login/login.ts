@@ -34,6 +34,9 @@ iniciarSesion() {
 
         this.authService.guardarToken(response.token);
         this.authService.guardarRol(response.rol);
+        this.authService.guardarUsuarioId(
+          response.usuarioId
+        );
 
         if(response.rol === 'ADMIN') {
           this.router.navigate(['/dashboard-admin']);

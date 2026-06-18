@@ -78,4 +78,25 @@ esAlmacenero(): boolean {
     localStorage.clear();
 
   }
+
+  guardarUsuarioId(
+  usuarioId: number
+) {
+
+  localStorage.setItem(
+    'usuarioId',
+    usuarioId.toString()
+  );
+
+}
+
+obtenerUsuarioId() {
+
+  return Number(
+    localStorage.getItem(
+      'usuarioId'
+    )
+  );
+
+}
 }
