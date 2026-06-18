@@ -1,0 +1,125 @@
+<div class="container mt-4 animate__animated animate__fadeIn">
+  
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1 text-dark fw-bold">📦 Mantenimiento de Proveedores</h2>
+      <p class="text-muted mb-0">Administra la lista de empresas asociadas, cadenas de suministro y contactos de Vortexis.</p>
+    </div>
+    <button class="btn btn-primary fw-semibold px-4" (click)="abrirModal()">
+      <i class="bi bi-building-plus me-2"></i> Nuevo Proveedor
+    </button>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th class="ps-3">ID</th>
+              <th>Razón Social</th>
+              <th>RUC</th>
+              <th>Teléfono de Contacto</th>
+              <th>Correo Corporativo</th>
+              <th>Dirección Fiscal</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (prov of proveedores; track prov.id) {
+            <tr>
+              <td class="ps-3"><strong>{{ prov.id }}</strong></td>
+              <td class="fw-bold text-secondary">{{ prov.razonSocial }}</td>
+              <td>
+                <span class="badge bg-light text-dark border fw-medium px-2 py-1.5">
+                  <i class="bi bi-card-text me-1"></i>{{ prov.ruc }}
+                </span>
+              </td>
+              <td>{{ prov.telefono || 'Sin registrar' }}</td>
+              <td>
+                <a [href]="'mailto:' + prov.correo" class="text-decoration-none text-primary">
+                  {{ prov.correo }}
+                </a>
+              </td>
+              <td class="text-muted text-truncate" style="max-width: 200px;">{{ prov.direccion || '-' }}</td>
+              <td class="text-center">
+                <button class="btn btn-warning btn-sm me-2 fw-semibold shadow-sm" (click)="editar(prov)">
+                  Editar
+                </button>
+                <button class="btn btn-danger btn-sm fw-semibold shadow-sm" (click)="eliminar(prov.id!)">
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="7" class="text-center text-muted py-5">
+                <div class="py-2">
+                  <i class="bi bi-building-exclamation fs-2 text-warning mb-2 d-block"></i>
+                  <span>No se encontraron proveedores activos registrados en el sistema.</span>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (mostrarModal) {
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title fw-bold">
+          {{ modoEdicion ? '✏️ Actualizar Ficha Proveedor' : '🏢 Registrar Proveedor Aliado' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body px-4 py-3">
+        <form (ngSubmit)="guardar()">
+          
+          <div class="mb-2.5">
+            <label class="form-label fw-semibold text-secondary mb-1">Razón Social de la Empresa</label>
+            <input type="text" class="form-control" [(ngModel)]="proveedor.razonSocial" name="razonSocial" required placeholder="Ej. Distribuidores del Sur S.A.C.">
+          </div>
+
+          <div class="mb-2.5">
+            <label class="form-label fw-semibold text-secondary mb-1">RUC (Registro Único de Contribuyente)</label>
+            <input type="text" class="form-control" [(ngModel)]="proveedor.ruc" name="ruc" maxlength="11" placeholder="Ej. 20123456789">
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-2.5">
+              <label class="form-label fw-semibold text-secondary mb-1">Teléfono Corporativo</label>
+              <input type="text" class="form-control" [(ngModel)]="proveedor.telefono" name="telefono" placeholder="Ej. (01) 445-8890">
+            </div>
+            <div class="col-md-6 mb-2.5">
+              <label class="form-label fw-semibold text-secondary mb-1">Correo Electrónico</label>
+              <input type="email" class="form-control" [(ngModel)]="proveedor.correo" name="correo" placeholder="ventas@empresa.com">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary mb-1">Dirección Fiscal / Oficina Principal</label>
+            <input type="text" class="form-control" [(ngModel)]="proveedor.direccion" name="direccion" placeholder="Ej. Av. Industrial 456, Lima">
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+            <button type="button" class="btn btn-secondary fw-semibold" (click)="cerrarModal()">Cancelar</button>
+            <button type="submit" class="btn" [ngClass]="modoEdicion ? 'btn-warning text-dark' : 'btn-primary'" [disabled]="!proveedor.razonSocial || !proveedor.ruc">
+              {{ modoEdicion ? 'Guardar Cambios' : 'Dar de Alta' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+}

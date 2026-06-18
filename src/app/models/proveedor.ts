@@ -1,6 +1,6 @@
 export interface Proveedor {
 
-  id: number;
+  id?: number;
 
   razonSocial: string;
 

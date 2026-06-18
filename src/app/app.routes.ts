@@ -11,6 +11,7 @@ import { MainLayout } from './layouts/main-layout/main-layout';
 import { Categorias } from './pages/categorias/categorias';
 import { Productos } from './pages/productos/productos';
 import { Clientes } from './pages/clientes/clientes';
+import { Proveedores } from './pages/proveedores/proveedores';
 
 export const routes: Routes = [
 
@@ -45,6 +46,10 @@ export const routes: Routes = [
       {       
         path: 'clientes',
         component: Clientes 
+      },
+      {       
+        path: 'proveedores',
+        component: Proveedores
       }
     ]
 },
