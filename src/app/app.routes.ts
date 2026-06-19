@@ -4,7 +4,7 @@ import { Login } from './pages/login/login';
 
 import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin';
 
-import { DashboardVendedor } from './pages/dashboard-vendedor/dashboard-vendedor';
+import { DashboardVendedorComponent } from './pages/dashboard-vendedor/dashboard-vendedor';
 
 import { DashboardAlmaceneroComponent } from './pages/dashboard-almacenero/dashboard-almacenero';
 import { MainLayout } from './layouts/main-layout/main-layout';
@@ -13,6 +13,7 @@ import { Productos } from './pages/productos/productos';
 import { Clientes } from './pages/clientes/clientes';
 import { Proveedores } from './pages/proveedores/proveedores';
 import { VentasComponent } from './pages/ventas/ventas';
+import { HistorialVentas } from './pages/historial-ventas/historial-ventas';
 
 export const routes: Routes = [
 
@@ -55,13 +56,17 @@ export const routes: Routes = [
       {
         path: 'ventas',
         component: VentasComponent
+      },
+           {
+        path: 'historial-ventas',
+        component: HistorialVentas
       }
     ]
 },
 
   {
     path: 'dashboard-vendedor',
-    component: DashboardVendedor
+    component: DashboardVendedorComponent
   },
 
   {

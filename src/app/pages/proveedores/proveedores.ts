@@ -7,16 +7,29 @@ import Swal from 'sweetalert2';
 import { ProveedorService } from '../../core/services/proveedor.service';
 import { Proveedor } from '../../models/proveedor';
 
+// 📦 PASO 2: IMPORTAR EL MÓDULO DE PAGINACIÓN
+import { NgxPaginationModule } from 'ngx-pagination';
+
 @Component({
   selector: 'app-proveedores',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    NgxPaginationModule // 📦 PASO 2: AGREGAR A LOS IMPORTS
+  ],
   templateUrl: './proveedores.html',
   styleUrl: './proveedores.css',
 })
 export class Proveedores implements OnInit {
 
+  // --- VARIABLES ADAPTADAS PARA EL BUSCADOR Y PAGINACIÓN ---
   proveedores: Proveedor[] = [];
+  proveedoresFiltrados: Proveedor[] = []; 
+  textoBuscar = ''; 
+
+  // 🔢 PASO 3: VARIABLE PARA EL CONTROL DE LA PÁGINA ACTUAL
+  paginaActual = 1;
 
   // Objeto base para el formulario de enlace bidireccional
   proveedor: Proveedor = {
@@ -30,7 +43,7 @@ export class Proveedores implements OnInit {
 
   // Variables para la gestión de la interfaz de usuario
   modoEdicion = false;
-  mostrarModal = false; // Controla la visibilidad del formulario flotante
+  mostrarModal = false; 
 
   constructor(
     private proveedorService: ProveedorService,
@@ -41,12 +54,14 @@ export class Proveedores implements OnInit {
     this.cargarProveedores();
   }
 
-  // 🔄 Obtener lista de proveedores desde el Backend
+  // --- CARGAR PROVEEDORES RESPALDANDO LOS FILTROS ---
   cargarProveedores() {
     this.proveedorService.listar().subscribe({
       next: (response) => {
         this.proveedores = response;
-        this.cdr.detectChanges(); // Fuerza la actualización visual de la tabla
+        this.proveedoresFiltrados = response; 
+        this.buscar(); 
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Error al cargar proveedores:', err);
@@ -54,17 +69,38 @@ export class Proveedores implements OnInit {
     });
   }
 
+  // --- MÉTODO BUSCAR() ADAPTADO PARA RESETEAR LA PAGINACIÓN ---
+  buscar() {
+    const texto = this.textoBuscar.toLowerCase().trim();
+
+    // 💡 Resetear a la página 1 al buscar para evitar cuadrantes vacíos en tablas paginadas
+    this.paginaActual = 1;
+
+    if (!texto) {
+      this.proveedoresFiltrados = this.proveedores;
+      return;
+    }
+
+    this.proveedoresFiltrados = this.proveedores.filter(p => {
+      const cumpleRazonSocial = p.razonSocial ? p.razonSocial.toLowerCase().includes(texto) : false;
+      
+      const rucTexto = p.ruc ? p.ruc.toString().toLowerCase() : '';
+      const cumpleRuc = rucTexto.includes(texto);
+
+      return cumpleRazonSocial || cumpleRuc;
+    });
+  }
+
   // 💾 Procesar persistencia (Guardar nuevo o Actualizar existente)
   guardar() {
     if (this.modoEdicion && this.proveedor.id) {
       
-      // 🛑 Ventana de confirmación previa antes de impactar los cambios del PUT
       Swal.fire({
         title: '¿Confirmar cambios?',
         text: `¿Estás seguro de actualizar los datos de "${this.proveedor.razonSocial}"?`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#0d6efd', // Azul Bootstrap
+        confirmButtonColor: '#0d6efd', 
         cancelButtonColor: '#6c757d',
         confirmButtonText: 'Sí, actualizar',
         cancelButtonText: 'Cancelar',
@@ -76,7 +112,6 @@ export class Proveedores implements OnInit {
               this.cerrarModal();
               this.cargarProveedores();
               
-              // Notificación flotante rápida de éxito (Toast)
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -95,7 +130,6 @@ export class Proveedores implements OnInit {
       });
 
     } else {
-      // 🚀 Flujo directo para registrar un nuevo proveedor (POST)
       this.proveedorService.guardar(this.proveedor).subscribe({
         next: () => {
           this.cerrarModal();
@@ -120,7 +154,7 @@ export class Proveedores implements OnInit {
 
   // ✏️ Cargar datos del elemento seleccionado en el formulario y abrir modal
   editar(proveedor: Proveedor) {
-    this.proveedor = { ...proveedor }; // Clonación para romper la referencia reactiva en tiempo real
+    this.proveedor = { ...proveedor }; 
     this.modoEdicion = true;
     this.mostrarModal = true;
   }
@@ -132,7 +166,7 @@ export class Proveedores implements OnInit {
       text: '¡Esta acción revocará al proveedor y podría afectar productos asociados!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#dc3545', // Rojo destructivo
+      confirmButtonColor: '#dc3545', 
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { VentaRequest } from '../../models/venta-request';
+import { Venta } from '../../models/venta';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,13 @@ export class VentaService {
     );
 
   }
+
+  listar() {
+
+  return this.http.get<Venta[]>(
+    this.apiUrl
+  );
+
+}
 
 }

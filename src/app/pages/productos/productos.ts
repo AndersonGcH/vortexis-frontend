@@ -13,20 +13,34 @@ import { Producto } from '../../models/producto';
 import { Categoria } from '../../models/categoria';
 import { Proveedor } from '../../models/proveedor';
 
+// 📦 PASO 2: IMPORTAR EL MÓDULO DE PAGINACIÓN
+import { NgxPaginationModule } from 'ngx-pagination';
+
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule], // 👈 Ambos declarados para evitar errores de compilación
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    NgxPaginationModule // 📦 PASO 2: AGREGAR A LOS IMPORTS
+  ], 
   templateUrl: './productos.html',
   styleUrl: './productos.css',
 })
 export class Productos implements OnInit {
 
+  // --- VARIABLES ADAPTADAS PARA EL BUSCADOR Y PAGINACIÓN ---
   productos: Producto[] = [];
+  productosFiltrados: Producto[] = []; 
+  textoBuscar = ''; 
+
+  // 🔢 PASO 3: VARIABLE PARA EL CONTROL DE LA PÁGINA ACTUAL
+  paginaActual = 1;
+
   categorias: Categoria[] = [];
   proveedores: Proveedor[] = [];
 
-  // Paso 1: Variable formulario unificada (any)
+  // Variable formulario unificada (any)
   producto: any = {
     id: null,
     nombre: '',
@@ -40,9 +54,9 @@ export class Productos implements OnInit {
     proveedorId: 0
   };
 
-  // Paso 2: Variable de control
+  // Variable de control
   modoEdicion = false;
-  mostrarModal = false; // Mantiene el modal oculto hasta que se requiera
+  mostrarModal = false; 
 
   constructor(
     private categoriaService: CategoriaService,
@@ -73,12 +87,34 @@ export class Productos implements OnInit {
     this.productoService.listar().subscribe({
       next: response => {
         this.productos = response;
+        this.productosFiltrados = response; 
+        this.buscar(); 
         this.cdr.detectChanges();
       }
     });
   }
 
-  // Paso 3: Método editar adaptado para abrir tu modal flotante
+  buscar() {
+    const texto = this.textoBuscar.toLowerCase().trim();
+
+    // 💡 Resetear a la página 1 al buscar para evitar cuadrantes vacíos
+    this.paginaActual = 1;
+
+    if (!texto) {
+      this.productosFiltrados = this.productos;
+      return;
+    }
+
+    this.productosFiltrados = this.productos.filter(p => {
+      const cumpleNombre = p.nombre ? p.nombre.toLowerCase().includes(texto) : false;
+      
+      const skuTexto = p.sku ? p.sku.toString().toLowerCase() : '';
+      const cumpleSku = skuTexto.includes(texto);
+
+      return cumpleNombre || cumpleSku;
+    });
+  }
+
   editar(producto: any) {
     this.producto = {
       id: producto.id,
@@ -93,29 +129,26 @@ export class Productos implements OnInit {
       proveedorId: producto.proveedor?.id ?? 0
     };
     this.modoEdicion = true;
-    this.mostrarModal = true; // 🔥 Abre el modal automáticamente al dar editar
+    this.mostrarModal = true; 
   }
 
- guardar() {
+  guardar() {
     if (this.modoEdicion && this.producto.id) {
       
-      // 🛑 PASO 1: Lanzamos primero el SweetAlert de confirmación de cambios
       Swal.fire({
         title: '¿Confirmar cambios?',
         text: `¿Estás seguro de actualizar el producto "${this.producto.nombre}"?`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#0d6efd', // Azul primario de Bootstrap
+        confirmButtonColor: '#0d6efd', 
         cancelButtonColor: '#6c757d',
         confirmButtonText: 'Sí, actualizar',
         cancelButtonText: 'Cancelar',
         reverseButtons: true
       }).then((result) => {
         
-        // 🚀 PASO 2: Si el usuario presiona "Sí, actualizar", se ejecuta la petición
         if (result.isConfirmed) {
           
-          // Buscamos los objetos completos en memoria para complacer a Hibernate en Java
           const catObj = this.categorias.find(c => c.id === Number(this.producto.categoriaId));
           const provObj = this.proveedores.find(p => p.id === Number(this.producto.proveedorId));
 
@@ -129,14 +162,13 @@ export class Productos implements OnInit {
             .actualizar(this.producto.id, productoParaEnviar)
             .subscribe({
               next: (res) => {
-                this.cerrarModal(); // 🧹 Cerramos el modal flotante
-                this.cargarProductos(); // 🔄 Refrescamos la tabla al instante
+                this.cerrarModal(); 
+                this.cargarProductos(); 
                 
-                // 🎉 Notificación rápida de éxito (Toast)
                 Swal.fire({ 
                   position: 'top-end', 
                   icon: 'success', 
-                  title: 'Producto actualizado con éxito', 
+                  title: 'Producto updated con éxito', 
                   showConfirmButton: false, 
                   timer: 1500, 
                   toast: true 
@@ -156,7 +188,6 @@ export class Productos implements OnInit {
       });
 
     } else {
-      // Guardar directo en creación (Se queda idéntico sin confirmación previa)
       this.productoService
         .guardar(this.producto)
         .subscribe({
@@ -170,7 +201,6 @@ export class Productos implements OnInit {
     }
   }
 
-  // Controladores del modal
   abrirModal() {
     this.modoEdicion = false;
     this.reset();
@@ -182,7 +212,6 @@ export class Productos implements OnInit {
     this.reset();
   }
 
-  // Paso 5: Reset completo
   reset() {
     this.producto = {
       id: null,
@@ -200,26 +229,23 @@ export class Productos implements OnInit {
   }
 
   eliminar(id: number) {
-    // 🎨 Cambiamos el confirm viejo por un SweetAlert dinámico y estético
     Swal.fire({
       title: '¿Estás seguro?',
       text: '¡Esta acción no se puede deshacer y el producto desaparecerá del inventario!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#dc3545', // Rojo peligro de Bootstrap
-      cancelButtonColor: '#6c757d',  // Gris secundario
+      confirmButtonColor: '#dc3545', 
+      cancelButtonColor: '#6c757d',  
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
-      reverseButtons: true // Pone el botón de cancelar a la izquierda (más natural)
+      reverseButtons: true 
     }).then((result) => {
       
-      // 🚀 Si el usuario confirma el modal:
       if (result.isConfirmed) {
         this.productoService.eliminar(id).subscribe({
           next: () => {
-            this.cargarProductos(); // Refrescamos la tabla al instante
+            this.cargarProductos(); 
             
-            // Notificación flotante (Toast) de éxito en la esquina superior derecha
             Swal.fire({
               position: 'top-end',
               icon: 'success',
@@ -231,7 +257,6 @@ export class Productos implements OnInit {
           },
           error: (error) => {
             console.error('Error al eliminar:', error);
-            // Modal de error por si el producto está amarrado a una orden o venta interna
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -244,6 +269,4 @@ export class Productos implements OnInit {
       
     });
   }
-
-
 }

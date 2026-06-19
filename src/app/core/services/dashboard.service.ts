@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { DashboardAdmin }
 from '../../models/dashboard-admin';
+import { DashboardVendedor } from '../../models/dashboard-vendedor';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,14 @@ obtenerProductosCriticos() {
 
 }
 
+obtenerDashboardVendedor(
+  usuarioId: number
+) {
+
+  return this.http.get<DashboardVendedor>(
+    `${this.apiUrl}/vendedor/${usuarioId}`
+  );
+
+}
 
 }

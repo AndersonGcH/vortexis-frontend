@@ -7,16 +7,29 @@ import Swal from 'sweetalert2';
 import { ClienteService } from '../../core/services/cliente.service';
 import { Cliente } from '../../models/cliente';
 
+// 📦 PASO 2: IMPORTAR EL MÓDULO DE PAGINACIÓN
+import { NgxPaginationModule } from 'ngx-pagination';
+
 @Component({
   selector: 'app-clientes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    NgxPaginationModule // 📦 PASO 2: AGREGAR A LOS IMPORTS
+  ],
   templateUrl: './clientes.html',
   styleUrl: './clientes.css',
 })
 export class Clientes implements OnInit {
 
+  // --- VARIABLES ADAPTADAS PARA EL BUSCADOR Y PAGINACIÓN ---
   clientes: Cliente[] = [];
+  clientesFiltrados: Cliente[] = []; 
+  textoBuscar = ''; 
+
+  // 🔢 PASO 3: VARIABLE PARA EL CONTROL DE LA PÁGINA ACTUAL
+  paginaActual = 1;
 
   // Objeto unificado para el formulario
   cliente: Cliente = {
@@ -31,7 +44,7 @@ export class Clientes implements OnInit {
 
   // Variables de control de interfaz
   modoEdicion = false;
-  mostrarModal = false; // Mantiene el modal cerrado hasta que se invoque
+  mostrarModal = false; 
 
   constructor(
     private clienteService: ClienteService,
@@ -47,7 +60,9 @@ export class Clientes implements OnInit {
     this.clienteService.listar().subscribe({
       next: (response) => {
         this.clientes = response;
-        this.cdr.detectChanges(); // Fuerza el refresco de la tabla en el HTML
+        this.clientesFiltrados = response; 
+        this.buscar(); 
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Error al cargar clientes:', err);
@@ -55,17 +70,37 @@ export class Clientes implements OnInit {
     });
   }
 
+  // --- MÉTODO BUSCAR() ADAPTADO PARA RESETEAR LA PAGINACIÓN ---
+  buscar() {
+    const texto = this.textoBuscar.toLowerCase().trim();
+
+    // 💡 Resetear a la página 1 al buscar para evitar cuadrantes vacíos
+    this.paginaActual = 1;
+
+    if (!texto) {
+      this.clientesFiltrados = this.clientes;
+      return;
+    }
+
+    this.clientesFiltrados = this.clientes.filter(c => {
+      const cumpleNombre = c.nombres ? c.nombres.toLowerCase().includes(texto) : false;
+      const cumpleDni = c.dni ? c.dni.toString().includes(texto) : false;
+      const cumpleRuc = c.ruc ? c.ruc.toString().includes(texto) : false;
+
+      return cumpleNombre || cumpleDni || cumpleRuc;
+    });
+  }
+
   // 💾 Guardar o Actualizar
   guardar() {
     if (this.modoEdicion && this.cliente.id) {
       
-      // 🛑 Confirmación previa antes de Modificar un cliente existente
       Swal.fire({
         title: '¿Confirmar cambios?',
         text: `¿Estás seguro de actualizar los datos de "${this.cliente.nombres}"?`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#0d6efd', // Azul Bootstrap
+        confirmButtonColor: '#0d6efd', 
         cancelButtonColor: '#6c757d',
         confirmButtonText: 'Sí, actualizar',
         cancelButtonText: 'Cancelar',
@@ -77,7 +112,6 @@ export class Clientes implements OnInit {
               this.cerrarModal();
               this.cargarClientes();
               
-              // Alerta flotante de éxito
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -96,7 +130,6 @@ export class Clientes implements OnInit {
       });
 
     } else {
-      // 🚀 Guardar nuevo Cliente de manera directa
       this.clienteService.guardar(this.cliente).subscribe({
         next: () => {
           this.cerrarModal();
@@ -121,9 +154,9 @@ export class Clientes implements OnInit {
 
   // ✏️ Preparar datos para Editar
   editar(cliente: Cliente) {
-    this.cliente = { ...cliente }; // Rompe la referencia en memoria con la fila
+    this.cliente = { ...cliente }; 
     this.modoEdicion = true;
-    this.mostrarModal = true; // 🔥 Abre el modal automáticamente
+    this.mostrarModal = true; 
   }
 
   // 🗑️ Eliminar Cliente con Modal de Advertencia
@@ -133,7 +166,7 @@ export class Clientes implements OnInit {
       text: 'Esta acción dará de baja al cliente del sistema Vortexis.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#dc3545', // Rojo peligro
+      confirmButtonColor: '#dc3545', 
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',

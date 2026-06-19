@@ -22,12 +22,16 @@ import {
 
 import Swal from 'sweetalert2';
 
+// 📦 PASO 2: IMPORTAR EL MÓDULO DE PAGINACIÓN
+import { NgxPaginationModule } from 'ngx-pagination';
+
 @Component({
   selector: 'app-categorias',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgxPaginationModule // 📦 PASO 2: AGREGAR A LOS IMPORTS
   ],
   templateUrl: './categorias.html',
   styleUrl: './categorias.css'
@@ -35,6 +39,11 @@ import Swal from 'sweetalert2';
 export class Categorias implements OnInit {
 
   categorias: Categoria[] = [];
+  categoriasFiltradas: Categoria[] = []; 
+  textoBuscar = ''; 
+
+  // 🔢 PASO 3: VARIABLE PARA EL CONTROL DE LA PÁGINA ACTUAL
+  paginaActual = 1;
 
   categoria: Categoria = {
     nombre: ''
@@ -58,9 +67,27 @@ export class Categorias implements OnInit {
       .subscribe({
         next: response => {
           this.categorias = response.sort((a: any, b: any) => a.id - b.id);
+          this.categoriasFiltradas = [...this.categorias]; 
+          this.buscar(); 
           this.cdr.detectChanges();
         }
       });
+  }
+
+  buscar() {
+    const texto = this.textoBuscar.toLowerCase().trim();
+    
+    // 💡 Resetear a la página 1 al buscar para evitar cuadrantes vacíos
+    this.paginaActual = 1;
+
+    if (!texto) {
+      this.categoriasFiltradas = this.categorias;
+      return;
+    }
+
+    this.categoriasFiltradas = this.categorias.filter(cat => 
+      cat.nombre ? cat.nombre.toLowerCase().includes(texto) : false
+    );
   }
 
   editar(categoria: Categoria) {
@@ -82,7 +109,7 @@ export class Categorias implements OnInit {
     this.resetFormulario();
   }
 
- guardar() {
+  guardar() {
     if (this.modoEdicion && this.categoria.id) {
       Swal.fire({
         title: '¿Confirmar cambios?',
@@ -114,7 +141,7 @@ export class Categorias implements OnInit {
                   toast: true 
                 });
                 
-                this.cdr.detectChanges();
+                this.cargarCategorias(); 
               },
               error: (err) => console.error('Error al actualizar:', err)
             });
@@ -138,14 +165,14 @@ export class Categorias implements OnInit {
               toast: true 
             });
 
-            this.cdr.detectChanges();
+            this.cargarCategorias(); 
           },
           error: (err) => console.error('Error al guardar:', err)
         });
     }
   }
 
-eliminar(id: number) {
+  eliminar(id: number) {
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'Esta acción no se puede deshacer',
@@ -161,6 +188,7 @@ eliminar(id: number) {
         this.categoriaService.eliminar(id).subscribe({
           next: () => {
             this.categorias = this.categorias.filter(cat => cat.id !== id);
+            this.categoriasFiltradas = this.categoriasFiltradas.filter(cat => cat.id !== id);
             this.cdr.detectChanges();
 
             Swal.fire({
@@ -172,7 +200,7 @@ eliminar(id: number) {
             });
           },
           error: (err) => {
-            Swal.fire('Error', 'No se pudo eliminar la categoría', 'error');
+            Swal.fire('Error', 'No se pudo eliminar la categoría. Asegúrate de que no tenga productos asociados.', 'error');
             console.error(err);
           }
         });
