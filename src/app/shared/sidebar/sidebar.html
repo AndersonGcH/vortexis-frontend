@@ -1,46 +1,56 @@
-<div class="vortexis-sidebar-dark">
+<div class="vortexis-sidebar-dark flex-grow-1 d-flex flex-column" style="width: 260px; min-height: 100%; overflow-x: hidden;">
   
-  <div class="sidebar-header text-center">
-    <h5>VORTEXIS</h5>
-    <span class="role-badge badge-admin">ADMINISTRADOR</span>
+  <div class="sidebar-header text-center py-4 px-3">
+    <h5 class="fw-bold text-white mb-1" style="letter-spacing: 1px;">VORTEXIS</h5>
+    <span class="role-badge badge-admin px-3 py-1 rounded-pill small fw-semibold">ADMINISTRADOR</span>
   </div>
 
-  <hr class="sidebar-divider">
+  <hr class="sidebar-divider my-2 opacity-25 bg-light">
 
-  <ul class="sidebar-menu-list">
-    <li>
-      <a routerLink="/dashboard-admin" routerLinkActive="active-item">
-        <i class="bi bi-bar-chart-fill icon"></i> Dashboard
+  <ul class="sidebar-menu-list list-unstyled px-2 flex-grow-1" style="overflow-y: auto;">
+    <li class="mb-1">
+      <a routerLink="/dashboard-admin" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-bar-chart-fill icon fs-5"></i> <span>Dashboard</span>
       </a>
     </li>
-    <li>
-      <a routerLink="/categorias" routerLinkActive="active-item">
-        <i class="bi bi-tags-fill icon"></i> Categorías
+    <li class="mb-1">
+      <a routerLink="/categorias" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-tags-fill icon fs-5"></i> <span>Categorías</span>
       </a>
     </li>
-    <li>
-      <a routerLink="/productos" routerLinkActive="active-item">
-        <i class="bi bi-box-seam-fill icon"></i> Productos
+    <li class="mb-1">
+      <a routerLink="/productos" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-box-seam-fill icon fs-5"></i> <span>Productos</span>
       </a>
     </li>
-    <li>
-      <a routerLink="/clientes" routerLinkActive="active-item">
-        <i class="bi bi-people-fill icon"></i> Clientes
+    <li class="mb-1">
+      <a routerLink="/clientes" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-people-fill icon fs-5"></i> <span>Clientes</span>
       </a>
     </li>
-    <li>
-      <a routerLink="/proveedores" routerLinkActive="active-item">
-        <i class="bi bi-truck icon"></i> Proveedores
+    <li class="mb-1">
+      <a routerLink="/proveedores" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-truck icon fs-5"></i> <span>Proveedores</span>
       </a>
     </li>
-    <li>
-      <a routerLink="/ventas" routerLinkActive="active-item">
-        <i class="bi bi-cart-fill icon"></i> Ventas
+    <li class="mb-1">
+      <a routerLink="/ventas" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-cart-fill icon fs-5"></i> <span>Ventas</span>
       </a>
     </li>
-    <li>
-      <a routerLink="/historial-ventas" routerLinkActive="active-item">
-        <i class="bi bi-journal-text icon"></i> Historial de Ventas
+    <li class="mb-1">
+      <a routerLink="/historial-ventas" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-journal-text icon fs-5"></i> <span>Historial de Ventas</span>
+      </a>
+    </li>
+    <li class="mb-1">
+      <a routerLink="/movimientos-inventario" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-inbox-fill icon fs-5"></i> <span style="white-space: normal; line-height: 1.2;">Movimientos de Inventario</span>
+      </a>
+    </li>
+    <li class="mb-1">
+      <a routerLink="/usuarios" routerLinkActive="active-item" class="d-flex align-items-center gap-3 px-3 py-2 rounded text-decoration-none text-light opacity-75">
+        <i class="bi bi-people-fill icon fs-5"></i> <span>Usuarios</span>
       </a>
     </li>
   </ul>

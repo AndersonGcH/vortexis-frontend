@@ -1,25 +1,14 @@
-<div class="container-fluid">
+<div class="d-flex align-items-stretch min-vh-100 bg-light">
+  
+  <div class="flex-shrink-0 d-flex" style="width: 260px;">
+    <app-sidebar class="w-100 d-flex flex-column"></app-sidebar>
+  </div>
 
-  <div class="row">
-
-    <div class="col-md-2 p-0">
-
-      <app-sidebar />
-
+  <div class="flex-grow-1 d-flex flex-column" style="min-width: 0;">
+    <app-navbar></app-navbar>
+    <div class="p-4 flex-grow-1">
+      <router-outlet></router-outlet>
     </div>
-
-    <div class="col-md-10 p-0">
-
-      <app-navbar />
-
-      <div class="p-4">
-
-        <router-outlet />
-
-      </div>
-
-    </div>
-
   </div>
 
 </div>

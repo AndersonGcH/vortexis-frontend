@@ -12,7 +12,7 @@ import { ProveedorService } from '../../core/services/proveedor.service';
 import { Producto } from '../../models/producto';
 import { Categoria } from '../../models/categoria';
 import { Proveedor } from '../../models/proveedor';
-
+import { MovimientoInventarioService } from '../../core/services/movimiento-inventario';
 // 📦 PASO 2: IMPORTAR EL MÓDULO DE PAGINACIÓN
 import { NgxPaginationModule } from 'ngx-pagination';
 
@@ -33,7 +33,10 @@ export class Productos implements OnInit {
   productos: Producto[] = [];
   productosFiltrados: Producto[] = []; 
   textoBuscar = ''; 
-
+cantidadIngreso = 0;
+motivoIngreso = '';
+productoSeleccionado: any;
+mostrarModalStock = false;
   // 🔢 PASO 3: VARIABLE PARA EL CONTROL DE LA PÁGINA ACTUAL
   paginaActual = 1;
 
@@ -62,7 +65,8 @@ export class Productos implements OnInit {
     private categoriaService: CategoriaService,
     private productoService: ProductoService,
     private proveedorService: ProveedorService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private movimientoService: MovimientoInventarioService
   ) {}
 
   ngOnInit() {
@@ -71,6 +75,27 @@ export class Productos implements OnInit {
     this.cargarProveedores();
   }
 
+  abrirModalStock(producto: any) {
+
+  this.productoSeleccionado = producto;
+
+  this.cantidadIngreso = 0;
+
+  this.motivoIngreso = '';
+ this.mostrarModalStock = true;
+}
+
+cerrarModalStock() {
+
+  this.mostrarModalStock = false;
+
+  this.productoSeleccionado = null;
+
+  this.cantidadIngreso = 0;
+
+  this.motivoIngreso = '';
+
+}
   cargarCategorias() {
     this.categoriaService.listar().subscribe({
       next: response => this.categorias = response
@@ -149,6 +174,9 @@ export class Productos implements OnInit {
         
         if (result.isConfirmed) {
           
+          this.producto.usuarioId =
+          Number(localStorage.getItem('usuarioId'));
+
           const catObj = this.categorias.find(c => c.id === Number(this.producto.categoriaId));
           const provObj = this.proveedores.find(p => p.id === Number(this.producto.proveedorId));
 
@@ -269,4 +297,70 @@ export class Productos implements OnInit {
       
     });
   }
+
+  ingresarStock() {
+
+  const movimiento = {
+
+    tipo: 'ENTRADA',
+
+    cantidad: this.cantidadIngreso,
+
+    motivo: this.motivoIngreso,
+
+    productoId: this.productoSeleccionado.id,
+
+    usuarioId: Number(
+      localStorage.getItem('usuarioId')
+    )
+
+  };
+
+  this.movimientoService
+      .registrar(movimiento)
+      .subscribe({
+
+        next: () => {
+
+          this.cerrarModalStock();
+
+          this.cargarProductos();
+
+          Swal.fire({
+
+            position: 'top-end',
+
+            icon: 'success',
+
+            title: 'Stock actualizado',
+
+            showConfirmButton: false,
+
+            timer: 1500,
+
+            toast: true
+
+          });
+
+        },
+
+        error: error => {
+
+          console.error(error);
+
+          Swal.fire({
+
+            icon: 'error',
+
+            title: 'Error',
+
+            text: 'No se pudo registrar el ingreso de stock.'
+
+          });
+
+        }
+
+      });
+
+}
 }

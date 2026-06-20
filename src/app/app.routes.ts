@@ -16,7 +16,8 @@ import { VentasComponent } from './pages/ventas/ventas';
 import { HistorialVentas } from './pages/historial-ventas/historial-ventas';
 import { VendedorLayoutComponent } from './layouts/vendedor-layout/vendedor-layout';
 import { AlmaceneroLayoutComponent } from './layouts/almacenero-layout/almacenero-layout';
-
+import { MovimientosInventarioComponent} from './pages/movimientos-inventario/movimientos-inventario';
+import { Usuarios } from './pages/usuarios/usuarios';
 
 export const routes: Routes = [
 
@@ -60,9 +61,17 @@ export const routes: Routes = [
         path: 'ventas',
         component: VentasComponent
       },
-           {
+      {
         path: 'historial-ventas',
         component: HistorialVentas
+      },
+      {
+        path: 'movimientos-inventario',
+        component: MovimientosInventarioComponent
+      },
+      {
+        path: 'usuarios',
+        component: Usuarios
       }
     ]
 },
@@ -118,7 +127,10 @@ export const routes: Routes = [
       path: 'proveedores',
       component: Proveedores // Tu componente de gestión de inventario/productos
     },
-    
+    {
+        path: 'movimientos-inventario',
+        component: MovimientosInventarioComponent
+    }
   ]
 }
 

@@ -1,0 +1,109 @@
+<div class="container-fluid py-4">
+
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <div class="fs-2 text-secondary">📊</div>
+    <div>
+      <h2 class="fw-bold m-0" style="color: #0f172a; font-size: 1.75rem;">Movimientos de Inventario</h2>
+      <p class="text-muted m-0 small">Historial analítico de entradas, salidas y ajustes de stock en tiempo real.</p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4 bg-white" style="border-radius: 12px;">
+    <div class="card-body p-2">
+      <div class="input-group">
+        <span class="input-group-text bg-light border-end-0 text-muted">🔍</span>
+        <input 
+          type="text" 
+          class="form-control border-start-0 shadow-none" 
+          placeholder="Buscar por producto, usuario, tipo (ENTRADA/SALIDA) o motivo..." 
+          [(ngModel)]="textoBuscar" 
+          (input)="buscar()"
+        />
+        @if (textoBuscar) {
+          <button class="btn btn-outline-secondary border-start-0" (click)="textoBuscar = ''; buscar();">
+            Limpiar
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px; overflow: hidden; background-color: #ffffff;">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle m-0" style="border-collapse: collapse;">
+        
+        <thead style="background-color: #1e293b; color: #ffffff;">
+          <tr>
+            <th class="py-3 px-4 fw-semibold text-uppercase small" style="letter-spacing: 0.05em; font-size: 0.75rem; border: none;">Fecha y Hora</th>
+            <th class="py-3 px-4 fw-semibold text-uppercase small" style="letter-spacing: 0.05em; font-size: 0.75rem; border: none;">Producto</th>
+            <th class="py-3 px-4 fw-semibold text-uppercase small" style="letter-spacing: 0.05em; font-size: 0.75rem; border: none; text-align: center;">Tipo</th>
+            <th class="py-3 px-4 fw-semibold text-uppercase small" style="letter-spacing: 0.05em; font-size: 0.75rem; border: none;">Cantidad</th>
+            <th class="py-3 px-4 fw-semibold text-uppercase small" style="letter-spacing: 0.05em; font-size: 0.75rem; border: none;">Usuario</th>
+            <th class="py-3 px-4 fw-semibold text-uppercase small" style="letter-spacing: 0.05em; font-size: 0.75rem; border: none;">Motivo</th>
+          </tr>
+        </thead>
+
+        <tbody style="font-size: 0.9rem; color: #334155;">
+          @for (movimiento of (movimientosFiltrados | paginate: { itemsPerPage: 5, currentPage: paginaActual }); track movimiento.id) {
+          <tr style="transition: background-color 0.15s ease-in-out; border-bottom: 1px solid #f1f5f9;">
+            
+            <td class="py-3 px-4 fw-medium text-secondary">
+              {{ movimiento.fecha | date:'dd/MM/yyyy HH:mm' }}
+            </td>
+            
+            <td class="py-3 px-4 fw-bold" style="color: #0f172a;">
+              {{ movimiento.producto.nombre }}
+            </td>
+            
+            <td class="py-3 px-4 text-center">
+              <span class="vortexis-table-badge"
+                    [ngClass]="{
+                      'badge-entrada': movimiento.tipo === 'ENTRADA',
+                      'badge-salida': movimiento.tipo === 'SALIDA',
+                      'badge-ajuste': movimiento.tipo === 'AJUSTE'
+                    }">
+                {{ movimiento.tipo }}
+              </span>
+            </td>
+            
+            <td class="py-3 px-4 fw-bold">
+              <span [style.color]="movimiento.tipo === 'ENTRADA' ? '#10b981' : (movimiento.tipo === 'SALIDA' ? '#ef4444' : '#f59e0b')">
+                {{ movimiento.tipo === 'ENTRADA' ? '+' : (movimiento.tipo === 'SALIDA' ? '-' : '') }}{{ movimiento.cantidad }} u.
+              </span>
+            </td>
+            
+            <td class="py-3 px-4">
+              <div class="d-flex align-items-center gap-2">
+                <span class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.8rem;">👤</span>
+                <span>{{ movimiento.usuario.nombre }}</span>
+              </div>
+            </td>
+            
+            <td class="py-3 px-4 text-muted" style="font-style: italic;">
+              {{ movimiento.motivo || 'Sin especificar' }}
+            </td>
+
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="6" class="text-center py-5 text-muted">
+              <span class="fs-3 d-block mb-2">🔍</span>
+              No se encontraron movimientos que coincidan con el criterio de búsqueda.
+            </td>
+          </tr>
+          }
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4 mb-4">
+    <pagination-controls
+      (pageChange)="paginaActual = $event"
+      previousLabel="Anterior"
+      nextLabel="Siguiente">
+    </pagination-controls>
+  </div>
+
+</div>

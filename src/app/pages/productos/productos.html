@@ -62,8 +62,11 @@
 
                 <td><span class="badge bg-info text-dark">{{ prod.categoria?.nombre || 'Sin Categoría' }}</span></td>
                 <td class="text-center">
-                  <button class="btn btn-warning btn-sm me-2 fw-semibold" (click)="editar(prod)">Editar</button>
-                  <button class="btn btn-danger btn-sm fw-semibold" (click)="eliminar(prod.id!)">Eliminar</button>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-warning btn-sm fw-semibold" (click)="editar(prod)">Editar</button>
+                    <button class="btn btn-danger btn-sm fw-semibold" (click)="eliminar(prod.id!)">Eliminar</button>
+                    <button class="btn btn-success btn-sm" (click)="abrirModalStock(prod)">Stock</button>
+                  </div>
                 </td>
               </tr>
             } @empty {
@@ -118,8 +121,14 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-semibold text-secondary">Stock Actual</label>
-              <input type="number" class="form-control" [(ngModel)]="producto.stock">
+              <label class="form-label fw-semibold text-secondary">
+                Stock actual
+              </label>
+
+              <input
+                class="form-control"
+                [value]="producto.stock"
+                readonly>
             </div>
 
             <div class="mb-3">
@@ -171,3 +180,121 @@
     </div>
   }
 </div>
+
+@if(mostrarModalStock){
+
+<div class="modal fade show d-block">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    Ingreso de Stock
+
+                </h5>
+
+                <button
+                    class="btn-close"
+                    (click)="cerrarModalStock()">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Producto
+
+                    </label>
+
+                    <input
+                        class="form-control"
+                        [value]="productoSeleccionado?.nombre"
+                        readonly>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Stock actual
+
+                    </label>
+
+                    <input
+                        class="form-control"
+                        [value]="productoSeleccionado?.stock"
+                        readonly>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Cantidad a ingresar
+
+                    </label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        [(ngModel)]="cantidadIngreso">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Motivo
+
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        [(ngModel)]="motivoIngreso">
+
+                    </textarea>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    (click)="cerrarModalStock()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    class="btn btn-success"
+                    (click)="ingresarStock()">
+
+                    Guardar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal-backdrop fade show"></div>
+
+}
