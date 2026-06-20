@@ -22,14 +22,13 @@
               <th style="width: 20%">Vendedor Encargado</th>
               <th style="width: 12%" class="text-center">Método</th>
               <th style="width: 12%" class="text-end">Total Facturado</th>
-              <th style="width: 8%" class="text-center">Acciones</th>
-            </tr>
+              <th style="width: 12%" class="text-center">Acciones</th> </tr>
           </thead>
           <tbody>
             @for (venta of ventas; track venta.id) {
               <tr [ngClass]="{'table-primary fw-semibold': ventaSeleccionada?.id === venta.id}">
                 <td><span class="badge bg-light text-dark border fw-bold">#{{ venta.id }}</span></td>
-                <td class="text-secondary small">{{ venta.fecha | date:'dd/MM/yyyy HH:mm:s' }}</td>
+                <td class="text-secondary small">{{ venta.fecha | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                 <td><strong>{{ venta.cliente?.nombres || 'Público General 👥' }}</strong></td>
                 <td>{{ venta.usuario.nombre }}</td>
                 <td class="text-center">
@@ -44,9 +43,12 @@
                   </span>
                 </td>
                 <td class="text-end fw-bold text-success text-nowrap">S/ {{ venta.total.toFixed(2) }}</td>
-                <td class="text-center">
-                  <button class="btn btn-primary btn-sm px-3 rounded-pill shadow-sm" (click)="verDetalle(venta)">
-                    👁️ Ver Detalle
+                <td class="text-center text-nowrap">
+                  <button class="btn btn-primary btn-sm px-2 rounded-pill shadow-sm me-1" (click)="verDetalle(venta)">
+                    👁️ Ver
+                  </button>
+                  <button class="btn btn-danger btn-sm px-2 rounded-pill shadow-sm" (click)="descargarPdf(venta.id)">
+                    📄 PDF
                   </button>
                 </td>
               </tr>

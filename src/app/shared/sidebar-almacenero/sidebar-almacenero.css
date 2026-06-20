@@ -1,0 +1,50 @@
+:host ::ng-deep {
+  /* Contenedor estructural del Sidebar - Slate 900 */
+  .sidebar-premium {
+    background-color: #0f172a !important; 
+    min-width: 250px;
+    max-width: 250px;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15) !important;
+    z-index: 20;
+  }
+
+  /* Ajuste tipográfico del header */
+  .tracking-tight {
+    letter-spacing: 0.05em;
+  }
+
+  /* Opacidad controlada para los textos */
+  .text-white-75 {
+    color: rgba(255, 255, 255, 0.75) !important;
+    transition: color 0.2s ease;
+  }
+
+  /* Enlaces de navegación base */
+  .nav-link-custom {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out !important;
+    border-left: 3px solid transparent !important;
+  }
+
+  /* Hover interactivo (Mismo comportamiento que los roles del login) */
+  .nav-link-custom:hover {
+    background-color: #1e293b !important; /* Slate 800 */
+    border-left-color: #0d6efd !important; /* Detalle azul */
+  }
+
+  .nav-link-custom:hover .text-white-75 {
+    color: #ffffff !important;
+  }
+
+  /* 🎯 RUTA ACTIVA AUTOMÁTICA (Angular inyecta esta clase al hacer match con la URL) */
+  .active-link {
+    background-color: rgba(13, 110, 253, 0.15) !important; /* Azul traslúcido */
+    border-left: 3px solid #0d6efd !important; /* Barra de enfoque azul rígida */
+  }
+
+  .active-link .text-white-75 {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+  }
+}

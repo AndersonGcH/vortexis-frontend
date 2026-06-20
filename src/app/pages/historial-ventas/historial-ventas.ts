@@ -1,8 +1,10 @@
-// src/app/pages/historial-ventas/historial-ventas.component.ts
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VentaService } from '../../core/services/venta.service';
 import { Venta } from '../../models/venta';
+
+// 📦 PASO 5: IMPORTACIÓN DE FILE-SAVER PARA MANEJO DE DESCARGAS BINARIAS
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-historial-ventas',
@@ -15,7 +17,7 @@ export class HistorialVentas implements OnInit {
 
   ventas: Venta[] = [];
   
-  // --- PASO 1: VARIABLE DE CONTROL EN MEMORIA ---
+  // --- CONTROL EN MEMORIA PARA DETALLES ---
   ventaSeleccionada: Venta | null = null;
 
   constructor(
@@ -27,6 +29,7 @@ export class HistorialVentas implements OnInit {
     this.cargarVentas();
   }
 
+  // Carga inicial del historial desde la API de Vortexis
   cargarVentas(): void {
     this.ventaService.listar().subscribe({
       next: (response) => {
@@ -37,13 +40,26 @@ export class HistorialVentas implements OnInit {
     });
   }
 
-  // --- PASO 2: SELECCIÓN INSTANTÁNEA ---
+  // Selecciona la venta instantáneamente para mostrarla en el panel lateral o modal
   verDetalle(venta: Venta): void {
     this.ventaSeleccionada = venta;
   }
 
-  // Permite al usuario cerrar el panel del recibo
+  // Quita la selección para cerrar la vista del recibo
   cerrarDetalle(): void {
     this.ventaSeleccionada = null;
+  }
+
+  // 📉 PASO 6: MÉTODO PARA CONECTAR EL SERVICIO CON LA DESCARGA DEL PDF
+  descargarPdf(id: number): void {
+    this.ventaService.descargarPdf(id).subscribe({
+      next: (response: Blob) => {
+        // Dispara la descarga del archivo en el navegador
+        saveAs(response, `venta_${id}.pdf`);
+      },
+      error: (error) => {
+        console.error('Error al procesar y descargar el archivo PDF:', error);
+      }
+    });
   }
 }

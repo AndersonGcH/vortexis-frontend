@@ -1,0 +1,94 @@
+/* Contenedor principal con fondo de malla geométrica moderna */
+.login-wrapper {
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #0f172a !important; /* Slate 900 */
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(13, 110, 253, 0.15) 0px, transparent 40%),
+      radial-gradient(at 100% 100%, rgba(30, 41, 59, 0.7) 0px, transparent 50%) !important;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+/* Esferas difuminadas para romper la rigidez del fondo */
+.bg-circle-1 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(13, 110, 253, 0.07) 0%, transparent 70%);
+  top: -10%;
+  left: -5%;
+  border-radius: 50%;
+}
+
+.bg-circle-2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(30, 41, 59, 0.05) 0%, transparent 70%);
+  bottom: -10%;
+  right: -5%;
+  border-radius: 50%;
+}
+
+/* Sombra suavizada multicapa para la tarjeta */
+.login-card {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02) !important;
+  border-radius: 1rem;
+}
+
+/* Panel derecho oscuro profesional */
+.info-panel {
+  background-color: #0f172a; /* Slate 900 de alta gama */
+}
+
+/* Cajas de rol con micro-interacción */
+.role-box {
+  background-color: #1e293b;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.role-box:hover {
+  background-color: #334155;
+  transform: translateX(4px);
+}
+
+/* Inputs con enfoque limpio sin anillos gruesos de navegador */
+.custom-input {
+  border: 2px solid #f1f5f9;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-input:focus {
+  background-color: #ffffff !important;
+  border-color: #0d6efd;
+}
+
+/* Botón estilizado */
+.custom-btn {
+  border-radius: 0.5rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  background-color: #0d6efd;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.custom-btn:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+.custom-btn:active {
+  transform: translateY(0);
+}
+
+/* Tipografía */
+.tracking-tight {
+  letter-spacing: -0.05em;
+}

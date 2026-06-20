@@ -14,6 +14,9 @@ import { Clientes } from './pages/clientes/clientes';
 import { Proveedores } from './pages/proveedores/proveedores';
 import { VentasComponent } from './pages/ventas/ventas';
 import { HistorialVentas } from './pages/historial-ventas/historial-ventas';
+import { VendedorLayoutComponent } from './layouts/vendedor-layout/vendedor-layout';
+import { AlmaceneroLayoutComponent } from './layouts/almacenero-layout/almacenero-layout';
+
 
 export const routes: Routes = [
 
@@ -64,14 +67,59 @@ export const routes: Routes = [
     ]
 },
 
-  {
-    path: 'dashboard-vendedor',
-    component: DashboardVendedorComponent
-  },
+{
+  path: 'vendedor',
+  component: VendedorLayoutComponent,
+  children: [
 
-  {
-    path: 'dashboard-almacenero',
-    component: DashboardAlmaceneroComponent
-  }
+    {
+      path: '',
+      redirectTo: 'dashboard',
+      pathMatch: 'full'
+    },
+
+    {
+      path: 'dashboard',
+      component: DashboardVendedorComponent
+    },
+
+    {
+      path: 'ventas',
+      component: VentasComponent
+    },
+
+    {
+      path: 'historial',
+      component: HistorialVentas
+    }
+
+  ]
+},
+
+
+{
+  path: 'almacenero',
+  component: AlmaceneroLayoutComponent, // Tu componente layout para el almacenero
+  children: [
+    {
+      path: '',
+      redirectTo: 'dashboard',
+      pathMatch: 'full'
+    },
+    {
+      path: 'dashboard',
+      component: DashboardAlmaceneroComponent // O el nombre exacto de tu componente
+    },
+    {
+      path: 'productos',
+      component: Productos // Tu componente de gestión de inventario/productos
+    },
+    {
+      path: 'proveedores',
+      component: Proveedores // Tu componente de gestión de inventario/productos
+    },
+    
+  ]
+}
 
 ];

@@ -1,53 +1,91 @@
-<div class="container mt-5">
+<div class="login-wrapper d-flex justify-content-center align-items-center position-relative overflow-hidden">
+  
+  <div class="bg-circle-1"></div>
+  <div class="bg-circle-2"></div>
 
-  <div class="row justify-content-center">
+  <div class="container position-relative z-2">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-9 col-xl-8">
+        
+        <div class="card border-0 login-card overflow-hidden">
+          <div class="row g-0">
+            
+            <div class="col-sm-6 p-4 p-md-5 bg-white d-flex flex-column justify-content-center">
+              <div class="mb-4">
+                <h3 class="fw-bold text-dark mb-1 tracking-tight">VORTEXIS</h3>
+                <p class="text-muted small">Ingresa tus credenciales para continuar.</p>
+              </div>
 
-    <div class="col-md-4">
+              <div>
+                <div class="mb-3">
+                  <label class="form-label text-secondary small fw-semibold">Email</label>
+                  <div class="input-group">
+                    <input 
+                      type="email" 
+                      class="form-control form-control-lg fs-6 custom-input bg-light shadow-none" 
+                      placeholder="nombre@correo.com"
+                      [(ngModel)]="email">
+                  </div>
+                </div>
 
-      <div class="card shadow">
+                <div class="mb-4">
+                  <label class="form-label text-secondary small fw-semibold">Contraseña</label>
+                  <div class="input-group">
+                    <input 
+                      type="password" 
+                      class="form-control form-control-lg fs-6 custom-input bg-light shadow-none" 
+                      placeholder="••••••••"
+                      [(ngModel)]="password">
+                  </div>
+                </div>
 
-        <div class="card-body">
+                <button 
+                  class="btn btn-primary btn-lg w-100 fs-6 fw-semibold shadow-sm py-2-5 custom-btn" 
+                  (click)="iniciarSesion()">
+                  Ingresar al Sistema
+                </button>
+              </div>
+            </div>
 
-          <h3 class="text-center mb-4">
-            Iniciar Sesión
-          </h3>
+            <div class="col-sm-6 p-4 p-md-5 d-flex flex-column justify-content-center info-panel">
+              <div class="mb-4 text-white">
+                <h5 class="fw-bold mb-1 text-info text-gradient">Accesos del Sistema</h5>
+                <p class="text-white-50 small">Credenciales demo para pruebas de rol:</p>
+              </div>
 
-          <div class="mb-3">
+              <div class="d-flex flex-column gap-3">
+                
+                <div class="role-box p-2.5 rounded border border-secondary border-opacity-10">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="badge bg-danger bg-opacity-75 text-uppercase font-monospace small">Admin</span>
+                    <span class="text-white-50 small font-monospace">Contraseña: 123456</span>
+                  </div>
+                  <code class="text-info font-monospace small">admin@gmail.com</code>
+                </div>
 
-            <label>Email</label>
+                <div class="role-box p-2.5 rounded border border-secondary border-opacity-10">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="badge bg-primary bg-opacity-75 text-uppercase font-monospace small">Vendedor</span>
+                    <span class="text-white-50 small font-monospace">Contraseña: 123456</span>
+                  </div>
+                  <code class="text-info font-monospace small">vendedor@gmail.com</code>
+                </div>
 
-            <input
-              type="email"
-              class="form-control"
-              [(ngModel)]="email">
+                <div class="role-box p-2.5 rounded border border-secondary border-opacity-10">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="badge bg-warning bg-opacity-75 text-dark text-uppercase font-monospace small">Almacenero</span>
+                    <span class="text-white-50 small font-monospace">Contraseña: 123456</span>
+                  </div>
+                  <code class="text-info font-monospace small">almacenero@gmail.com</code>
+                </div>
+
+              </div>
+            </div>
 
           </div>
-
-          <div class="mb-3">
-
-            <label>Contraseña</label>
-
-            <input
-              type="password"
-              class="form-control"
-              [(ngModel)]="password">
-
-          </div>
-
-          <button
-            class="btn btn-primary w-100"
-            (click)="iniciarSesion()">
-
-            Ingresar
-
-          </button>
-
         </div>
-
+        
       </div>
-
     </div>
-
   </div>
-
 </div>

@@ -1,0 +1,68 @@
+:host ::ng-deep {
+  /* Contenedor principal con fondo gris claro tecnológico */
+  .dashboard-wrapper {
+    background-color: #f8fafc;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* Tarjetas de Métricas */
+  .card-metric {
+    background-color: #ffffff !important;
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  /* Formas contenedoras de íconos */
+  .icon-shape {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Subtonos limpios para los fondos de los íconos */
+  .bg-primary-subtle { background-color: rgba(13, 110, 253, 0.08) !important; }
+  .bg-success-subtle { background-color: rgba(25, 135, 84, 0.08) !important; }
+  .bg-info-subtle    { background-color: rgba(13, 202, 240, 0.08) !important; }
+  .bg-danger-subtle  { background-color: rgba(220, 53, 69, 0.08) !important; }
+
+  /* Paneles contenedores de Tablas y Gráficos */
+  .panel-container {
+    border-radius: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    overflow: hidden;
+  }
+
+  /* Transición de elevación idéntica al login */
+  .transition-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  }
+
+  .transition-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  /* Ajustes de espaciado y fuentes */
+  .tracking-tight {
+    letter-spacing: -0.04em;
+  }
+
+/* Ajustes de espaciado y fuentes */
+  .tracking-tight {
+    letter-spacing: -0.04em;
+  }
+
+  /* Cambiamos el nombre a un guion bajo para que CSS lo procese sin errores */
+  .p-3_5 {
+    padding: 1.15rem !important;
+  }
+
+  /* Limpieza de líneas de la tabla */
+  .table > :not(caption) > * > * {
+    padding: 0.75rem 0.75rem;
+    border-bottom-color: #f1f5f9;
+  }
+} /* <- Esta llave cierra correctamente el ":host ::ng-deep" global */

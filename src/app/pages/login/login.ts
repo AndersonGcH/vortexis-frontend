@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { AuthService } from '../../core/services/auth.service';
+
+// 🍦 IMPORTAMOS SWEETALERT2
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +16,6 @@ import { AuthService } from '../../core/services/auth.service';
 export class Login {
 
   email = '';
-
   password = '';
 
   constructor(
@@ -22,37 +23,47 @@ export class Login {
     private router: Router
   ) {}
 
-iniciarSesion() {
+  iniciarSesion() {
     this.authService.login({
       email: this.email,
       password: this.password
     }).subscribe({
       next: (response) => {
-        
-
+        // Limpieza y persistencia de sesión
         localStorage.removeItem('token'); 
-
         this.authService.guardarToken(response.token);
         this.authService.guardarRol(response.rol);
-        this.authService.guardarUsuarioId(
-          response.usuarioId
-        );
+        this.authService.guardarUsuarioId(response.usuarioId);
 
-        if(response.rol === 'ADMIN') {
+        // Enrutamiento dinámico según el rol asignado
+        if (response.rol === 'ADMIN') {
           this.router.navigate(['/dashboard-admin']);
         }
-        else if(response.rol === 'VENDEDOR') {
-          this.router.navigate(['/dashboard-vendedor']);
+
+        if (response.rol === 'VENDEDOR') {
+          this.router.navigate(['/vendedor/dashboard']);
         }
-        else if(response.rol === 'ALMACENERO') {
-          this.router.navigate(['/dashboard-almacenero']);
+
+        if (response.rol === 'ALMACENERO') {
+          this.router.navigate(['/almacenero/dashboard']);
         }
       },
       error: (error) => {
-        alert('Correo o contraseña incorrectos');
-        console.error(error);
+        // ❌ REEMPLAZO DEL ALERT NATIVO POR SWEETALERT2
+        Swal.fire({
+          icon: 'error',
+          title: 'Acceso Denegado',
+          text: 'El correo electrónico o la contraseña son incorrectos.',
+          confirmButtonColor: '#0d6efd', // Combina con el azul de tu botón de login
+          confirmButtonText: 'Entendido',
+          background: '#ffffff',
+          customClass: {
+            popup: 'rounded-3 shadow'
+          }
+        });
+        
+        console.error('Error de autenticación:', error);
       }
     });
   }
-
 }

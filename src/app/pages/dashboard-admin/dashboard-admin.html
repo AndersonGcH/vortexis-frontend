@@ -1,63 +1,74 @@
-<div class="container mt-4 animate__animated animate__fadeIn">
+<div class="dashboard-wrapper p-4 animate__animated animate__fadeIn">
 
-  <div class="mb-4">
-    <h2 class="text-dark fw-bold mb-1">📁 Dashboard Administrador</h2>
-    <p class="text-muted mb-0">Resumen analítico de operaciones, inventario y ventas en Vortexis.</p>
+  <div class="mb-4 d-flex justify-content-between align-items-center">
+    <div>
+      <h2 class="text-dark fw-bold mb-1 tracking-tight">📁 Dashboard Administrador</h2>
+      <p class="text-muted small mb-0">Resumen analítico de operaciones, inventario y ventas en Vortexis.</p>
+    </div>
   </div>
 
   <div class="row g-3">
+    
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-white">
-        <div class="card-body text-center py-4">
-          <div class="text-primary fs-3 mb-2">
+      <div class="card card-metric border-0 shadow-sm transition-card">
+    <div class="card-body d-flex align-items-center p-3_5">
+            <div class="icon-shape bg-primary-subtle text-primary rounded-3 me-3 fs-3">
             <i class="bi bi-cart-check-fill"></i>
           </div>
-          <h6 class="text-muted fw-semibold mb-1">Ventas</h6>
-          <h3 class="fw-bold text-dark mb-0">
-            {{ dashboard?.cantidadVentas || 0 }}
-          </h3>
+          <div>
+            <h6 class="text-secondary small fw-semibold mb-1">Ventas Realizadas</h6>
+            <h3 class="fw-bold text-dark mb-0 font-monospace">
+              {{ dashboard?.cantidadVentas || 0 }}
+            </h3>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-white">
-        <div class="card-body text-center py-4">
-          <div class="text-success fs-3 mb-2">
+      <div class="card card-metric border-0 shadow-sm transition-card">
+        <div class="card-body d-flex align-items-center p-3_5">
+          <div class="icon-shape bg-success-subtle text-success rounded-3 me-3 fs-3">
             <i class="bi bi-cash-coin"></i>
           </div>
-          <h6 class="text-muted fw-semibold mb-1">Ingresos</h6>
-          <h3 class="fw-bold text-dark mb-0">
-            S/ {{ dashboard?.totalVentas || '0.00' }}
-          </h3>
+          <div>
+            <h6 class="text-secondary small fw-semibold mb-1">Total Ingresos</h6>
+            <h3 class="fw-bold text-success mb-0 font-monospace">
+              S/ {{ dashboard?.totalVentas || '0.00' }}
+            </h3>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-white">
-        <div class="card-body text-center py-4">
-          <div class="text-info fs-3 mb-2">
+      <div class="card card-metric border-0 shadow-sm transition-card">
+        <div class="card-body d-flex align-items-center p-3_5">
+          <div class="icon-shape bg-info-subtle text-info rounded-3 me-3 fs-3">
             <i class="bi bi-box-seam-fill"></i>
           </div>
-          <h6 class="text-muted fw-semibold mb-1">Productos</h6>
-          <h3 class="fw-bold text-dark mb-0">
-            {{ dashboard?.totalProductos || 0 }}
-          </h3>
+          <div>
+            <h6 class="text-secondary small fw-semibold mb-1">Productos Catálogo</h6>
+            <h3 class="fw-bold text-dark mb-0 font-monospace">
+              {{ dashboard?.totalProductos || 0 }}
+            </h3>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="col-md-3">
-      <div class="card shadow-sm border-0 bg-white">
-        <div class="card-body text-center py-4">
-          <div class="text-danger fs-3 mb-2">
+      <div class="card card-metric border-0 shadow-sm transition-card border-start border-danger border-3">
+        <div class="card-body d-flex align-items-center p-3_5">
+          <div class="icon-shape bg-danger-subtle text-danger rounded-3 me-3 fs-3">
             <i class="bi bi-exclamation-triangle-fill"></i>
           </div>
-          <h6 class="text-muted fw-semibold mb-1">Stock Bajo</h6>
-          <h3 class="fw-bold text-dark mb-0">
-            {{ dashboard?.productosStockBajo || 0 }}
-          </h3>
+          <div>
+            <h6 class="text-danger small fw-semibold mb-1">Stock Crítico</h6>
+            <h3 class="fw-bold text-danger mb-0 font-monospace">
+              {{ dashboard?.productosStockBajo || 0 }}
+            </h3>
+          </div>
         </div>
       </div>
     </div>
@@ -66,29 +77,31 @@
   <div class="row mt-4">
     
     <div class="col-lg-5 mb-4">
-      <div class="card shadow-sm border-0 h-100 bg-white">
-        <div class="card-header bg-dark text-white py-3">
-          <h5 class="card-title fw-bold mb-0 fs-6">📋 Top Productos (Lista)</h5>
+      <div class="card border-0 shadow-sm h-100 bg-white panel-container">
+        <div class="card-header bg-dark text-white py-3 border-0 rounded-top-3">
+          <h5 class="card-title fw-bold mb-0 fs-6">📋 Top Productos Más Vendidos</h5>
         </div>
         <div class="card-body p-0">
           <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
+            <table class="table table-striped table-hover align-middle mb-0">
+              <thead class="table-light text-secondary small text-uppercase">
                 <tr>
-                  <th class="ps-3">Producto</th>
-                  <th class="text-end pe-3">Cantidad Vendida</th>
+                  <th class="ps-3 border-0">Descripción del Producto</th>
+                  <th class="text-end pe-3 border-0">Volumen Venta</th>
                 </tr>
               </thead>
               <tbody>
                 @for (producto of dashboard?.topProductos; track producto.producto) {
                   <tr>
-                    <td class="ps-3 fw-medium text-secondary">{{ producto.producto }}</td>
-                    <td class="text-end pe-3 fw-bold text-dark">{{ producto.cantidadVendida }} u.</td>
+                    <td class="ps-3 fw-semibold text-secondary">{{ producto.producto }}</td>
+                    <td class="text-end pe-3 fw-bold text-dark font-monospace">
+                      <span class="badge bg-light text-dark border px-2.5 py-1.5">{{ producto.cantidadVendida }} u.</span>
+                    </td>
                   </tr>
                 } @empty {
                   <tr>
                     <td colspan="2" class="text-center text-muted py-5">
-                      No hay datos de productos vendidos.
+                      No se registran datos de productos en este período.
                     </td>
                   </tr>
                 }
@@ -100,19 +113,19 @@
     </div>
 
     <div class="col-lg-7 mb-4">
-      <div class="card shadow-sm border-0 h-100 bg-white">
-        <div class="card-header bg-light border-0 py-3">
-          <h5 class="card-title fw-bold text-dark mb-0 fs-6">📊 Proyección Visual de Ventas</h5>
+      <div class="card border-0 shadow-sm h-100 bg-white panel-container">
+        <div class="card-header bg-white border-bottom py-3 rounded-top-3">
+          <h5 class="card-title fw-bold text-dark mb-0 fs-6">📊 Proyección Estadística de Demanda</h5>
         </div>
-        <div class="card-body d-flex align-items-center justify-content-center">
+        <div class="card-body d-flex align-items-center justify-content-center p-4">
           @if (dashboard && dashboard.topProductos && dashboard.topProductos.length > 0) {
             <div style="position: relative; height: 280px; width: 100%;">
               <canvas id="graficoProductos"></canvas>
             </div>
           } @else {
             <div class="text-center text-muted py-5">
-              <i class="bi bi-bar-chart fs-2 text-warning mb-2 d-block"></i>
-              <span>Esperando datos para inicializar el gráfico estadístico...</span>
+              <i class="bi bi-bar-chart fs-2 text-warning mb-2 d-block animate__animated animate__pulse animate__infinite"></i>
+              <span class="small fw-medium">Sincronizando flujos de datos para inicializar el gráfico de barras...</span>
             </div>
           }
         </div>
