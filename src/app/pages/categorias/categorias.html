@@ -2,8 +2,8 @@
 
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="mb-1 text-dark fw-bold">📂 Mantenimiento de Categorías</h2>
-      <p class="text-muted mb-0">Administra las agrupaciones taxonómicas, líneas de artículos y familias de inventario.</p>
+      <h2 class="mb-1 text-dark fw-bold">Mantenimiento de Categorías</h2>
+      <p class="text-muted mb-0">Administra las categorías de productos.</p>
     </div>
     <button class="btn btn-primary fw-semibold px-4" (click)="abrirModal()">
       <i class="bi bi-folder-plus me-2"></i> Nueva Categoría
@@ -96,7 +96,7 @@
         
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title fw-bold">
-            {{ modoEdicion ? '✏️ Actualizar Familia' : '📂 Registrar Nueva Familia' }}
+            {{ modoEdicion ? 'Actualizar Categoría' : 'Registrar Nueva Categoría' }}
           </h5>
           <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
         </div>

@@ -1,17 +1,31 @@
 <div class="container-fluid mt-3 px-4">
   
   <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-    <h2 class="text-dark fw-bold mb-0">🎯 Sistema Integrado de Ventas (POS)</h2>
+    <h2 class="text-dark fw-bold mb-0">Sistema Integrado de Ventas (POS)</h2>
     <span class="badge bg-success px-3 py-2">Estado: En Línea</span>
   </div>
 
   <div class="row">
     
     <div class="col-lg-8 col-md-7 mb-4">
-      <h4 class="text-secondary mb-3 fw-semibold">📦 Productos Disponibles</h4>
+      
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+        <h4 class="text-secondary mb-0 fw-semibold">Productos Disponibles</h4>
+        
+        <div class="input-group style-search shadow-sm" style="max-width: 350px; border-radius: 8px; overflow: hidden;">
+          <span class="input-group-text bg-white border-end-0 text-muted py-2"><i class="bi bi-search"></i></span>
+          <input 
+            type="text" 
+            class="form-control border-start-0 shadow-none py-2" 
+            placeholder="Buscar por producto o SKU..." 
+            [(ngModel)]="textoBuscar" 
+            (input)="buscar()"
+          />
+        </div>
+      </div>
       
       <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
-        @for (producto of productos; track producto.id) {
+        @for (producto of (productosFiltrados | paginate: { itemsPerPage: 6, currentPage: paginaActual }); track producto.id) {
           <div class="col">
             <div class="card h-100 shadow-sm border-0 position-relative border-hover">
               <span class="position-absolute top-0 end-0 m-2 badge" 
@@ -28,21 +42,38 @@
                   <button class="btn btn-outline-primary btn-sm rounded-pill px-3" 
                           [disabled]="producto.stock <= 0"
                           (click)="agregarProducto(producto)">
-                    {{ producto.stock > 0 ? '⚡ Añadir' : 'Sin Stock' }}
+                    {{ producto.stock > 0 ? 'Añadir' : 'Sin Stock' }}
                   </button>
                 </div>
               </div>
             </div>
           </div>
+        } @empty {
+          <div class="col-12 w-100 text-center py-5 bg-white rounded-3 shadow-sm" style="border: 2px dashed #dee2e6;">
+            <i class="bi bi-box-seam text-muted fs-1 mb-2 d-block"></i>
+            <p class="text-muted fw-semibold mb-0">No se encontraron productos que coincidan con la búsqueda.</p>
+          </div>
         }
       </div>
+
+      <div class="d-flex justify-content-center mt-4">
+        <pagination-controls
+          (pageChange)="paginaActual = $event"
+          previousLabel="Anterior"
+          nextLabel="Siguiente"
+          screenReaderPaginationLabel="Paginación"
+          screenReaderPageLabel="página"
+          screenReaderCurrentLabel="Estás en la página">
+        </pagination-controls>
+      </div>
+
     </div>
 
     <div class="col-lg-4 col-md-5">
       <div class="card shadow border-0 position-sticky" style="top: 20px; z-index: 10;">
         
         <div class="card-header bg-dark text-white py-3">
-          <h5 class="mb-0 fw-bold">🛒 Resumen de Pedido</h5>
+          <h5 class="mb-0 fw-bold">Resumen de Pedido</h5>
         </div>
 
         <div class="card-body bg-light">
@@ -109,7 +140,7 @@
           
           <button class="btn btn-success btn-lg w-100 rounded-3 shadow-sm fw-bold py-2"
                   (click)="registrarVenta()">
-            🚀 Confirmar y Registrar Venta
+            Confirmar y Registrar Venta
           </button>
         </div>
 

@@ -2,11 +2,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2'; 
+import { NgxPaginationModule } from 'ngx-pagination'; // ⚡ Paso 1: Importar Paginación
 
 // Servicios
 import { ClienteService } from '../../core/services/cliente.service';
 import { ProductoService } from '../../core/services/producto.service';
-import { VentaService } from '../../core/services/venta.service'; // <-- NUEVO
+import { VentaService } from '../../core/services/venta.service';
 
 // Modelos
 import { Cliente } from '../../models/cliente';
@@ -17,7 +19,7 @@ import { ItemCarrito } from '../../models/item-carrito';
 @Component({
   selector: 'app-ventas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule], // ⚡ Paso 2: Agregar al módulo
   templateUrl: './ventas.html',
   styleUrls: ['./ventas.css']
 })
@@ -26,7 +28,12 @@ export class VentasComponent implements OnInit {
   // Listas de datos maestros
   clientes: Cliente[] = [];
   productos: Producto[] = [];
-  metodosPago: string[] = ['EFECTIVO', 'YAPE', 'PLIN', 'TARJETA'];
+  productosFiltrados: Producto[] = []; // ⚡ Filtro independiente para las tarjetas
+  metodosPago: string[] = ['EFECTIVO', 'YAPE'];
+
+  // Controladores de UI
+  textoBuscar: string = ''; // ⚡ Input del buscador
+  paginaActual: number = 1; // ⚡ Control de página
 
   // Estados del Carrito
   carrito: ItemCarrito[] = [];
@@ -43,7 +50,7 @@ export class VentasComponent implements OnInit {
   constructor(
     private clienteService: ClienteService,
     private productoService: ProductoService,
-    private ventaService: VentaService, // <-- INYECTADO
+    private ventaService: VentaService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -53,7 +60,6 @@ export class VentasComponent implements OnInit {
     this.inicializarUsuario();
   }
 
-  // Cargar ID del usuario logueado desde el LocalStorage de forma segura
   inicializarUsuario(): void {
     const idLocal = localStorage.getItem('usuarioId');
     this.venta.usuarioId = idLocal ? Number(idLocal) : 0;
@@ -73,16 +79,38 @@ export class VentasComponent implements OnInit {
     this.productoService.listar().subscribe({
       next: (response) => {
         this.productos = response;
+        this.buscar(); // ⚡ Inicializa o refresca el filtro actual sin perder el texto tipeado
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al cargar productos:', err)
     });
   }
 
-  // Lógica de adición al carrito
+  // ⚡ Paso 3: Método buscar interactivo
+  buscar(): void {
+    this.paginaActual = 1; 
+    const texto = this.textoBuscar.toLowerCase().trim();
+
+    if (!texto) {
+      this.productosFiltrados = this.productos;
+      return;
+    }
+
+    this.productosFiltrados = this.productos.filter(p => 
+      p.nombre.toLowerCase().includes(texto) || 
+      (p.sku && p.sku.toLowerCase().includes(texto))
+    );
+  }
+
+  // Lógica de adición al carrito con modales estilizados
   agregarProducto(producto: Producto): void {
     if (producto.stock <= 0) {
-      alert('Este producto no cuenta con stock disponible.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Stock Agotado',
+        text: 'Este producto no cuenta con stock disponible.',
+        confirmButtonColor: '#dc3545'
+      });
       return;
     }
     const item = this.carrito.find(x => x.producto.id === producto.id);
@@ -96,7 +124,12 @@ export class VentasComponent implements OnInit {
 
   aumentarCantidad(item: ItemCarrito): void {
     if (item.cantidad >= item.producto.stock) {
-      alert(`Stock máximo alcanzado: ${item.producto.stock} unidades.`);
+      Swal.fire({
+        icon: 'info',
+        title: 'Límite de Stock',
+        text: `Stock máximo alcanzado: ${item.producto.stock} unidades.`,
+        confirmButtonColor: '#0d6efd'
+      });
       return;
     }
     item.cantidad++;
@@ -123,47 +156,95 @@ export class VentasComponent implements OnInit {
     this.total = this.carrito.reduce((acum, item) => acum + item.subtotal, 0);
   }
 
-  // --- PASO 6.1: REGISTRAR LA VENTA REAL ---
+  // --- REGISTRAR LA VENTA REAL ---
   registrarVenta(): void {
     if (this.carrito.length === 0) {
-      alert("Debe agregar al menos un producto al carrito.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Carrito Vacío',
+        text: 'Debe agregar al menos un producto al carrito.',
+        confirmButtonColor: '#ffc107'
+      });
       return;
     }
     if (this.venta.clienteId === 0) {
-      alert("Por favor, seleccione un cliente.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Falta Cliente',
+        text: 'Por favor, seleccione un cliente.',
+        confirmButtonColor: '#ffc107'
+      });
       return;
     }
     if (this.venta.metodoPago === "") {
-      alert("Por favor, seleccione un método de pago.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Falta Método de Pago',
+        text: 'Por favor, seleccione un método de pago.',
+        confirmButtonColor: '#ffc107'
+      });
       return;
     }
 
-    // Aseguramos el ID del usuario antes de enviar
     this.inicializarUsuario();
 
-    // Mapeamos el Carrito al DTO que espera Spring Boot
     this.venta.detalles = this.carrito.map(item => ({
       productoId: item.producto.id!,
       cantidad: item.cantidad
     }));
 
-    // Despachamos al Backend
     this.ventaService.registrar(this.venta).subscribe({
-      next: () => {
-        alert("🎉 Venta registrada correctamente en el sistema.");
-        this.limpiarVenta();
+      next: (venta) => {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Venta realizada!',
+          html: `
+            <b>La venta fue registrada correctamente.</b>
+            <br><br>
+            <b>N° Venta:</b> ${venta.id}
+            <br>
+            <b>Total:</b> S/ ${this.total.toFixed(2)}
+            <br><br>
+            ¿Desea descargar el comprobante PDF?
+          `,
+          showCancelButton: true,
+          confirmButtonText: '📄 Descargar PDF',
+          cancelButtonText: 'Aceptar',
+          confirmButtonColor: '#198754',
+          cancelButtonColor: '#0d6efd',
+          allowOutsideClick: false
+        }).then(result => {
+          if (result.isConfirmed) {
+            this.ventaService
+              .descargarPdf(venta.id!)
+              .subscribe(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Venta-${venta.id}.pdf`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+              });
+          }
+          this.limpiarVenta();
+        });
       },
       error: (error) => {
-        console.error('Error del servidor:', error);
-        alert("❌ Error al procesar la transacción. Verifique el stock o la consola.");
+        Swal.fire({
+          icon: 'error',
+          title: 'No se pudo registrar la venta',
+          text: error.error?.message ?? 'Ocurrió un error inesperado.',
+          confirmButtonText: 'Aceptar'
+        });
       }
     });
   }
 
-  // --- PASO 6.2: LIMPIAR LA PANTALLA Y REFRESCAR STOCK ---
+  // --- LIMPIAR LA PANTALLA Y REFRESCAR STOCK ---
   limpiarVenta(): void {
     this.carrito = [];
     this.total = 0;
+    this.textoBuscar = ''; // Limpia el filtro al completar
     this.venta = {
       clienteId: 0,
       usuarioId: 0,
@@ -171,8 +252,8 @@ export class VentasComponent implements OnInit {
       detalles: []
     };
     
-    // Volvemos a traer los productos porque Spring ya restó las cantidades en BD
     this.cargarProductos();
     this.inicializarUsuario();
+    this.cdr.detectChanges(); 
   }
 }

@@ -16,12 +16,16 @@ export class VentaService {
   ) {}
 
   // 📝 Registrar una nueva venta en el sistema
-  registrar(venta: VentaRequest) {
-    return this.http.post(
-      this.apiUrl,
-      venta
-    );
-  }
+registrar(
+  venta: VentaRequest
+): Observable<Venta> {
+
+  return this.http.post<Venta>(
+    this.apiUrl,
+    venta
+  );
+
+}
 
   // 📋 Listar el historial de ventas completo
   listar(): Observable<Venta[]> {

@@ -40,10 +40,9 @@ export const routes: Routes = [
         path: 'dashboard-admin',
         component: DashboardAdminComponent
       },
-      // 2️⃣ AGREGA ESTA LÍNEA AQUÍ ADENTRO 🔥
       {
         path: 'categorias',
-        component: Categorias // Coloca el nombre exacto de la clase de tu archivo categorias.ts
+        component: Categorias 
       },
       {
         path: 'productos',
@@ -96,19 +95,25 @@ export const routes: Routes = [
       path: 'ventas',
       component: VentasComponent
     },
-
     {
       path: 'historial',
       component: HistorialVentas
+    },
+    {
+      path: 'productos',
+      component: Productos
+    },
+    {
+      path: 'clientes',
+      component: Clientes
     }
-
   ]
 },
 
 
 {
   path: 'almacenero',
-  component: AlmaceneroLayoutComponent, // Tu componente layout para el almacenero
+  component: AlmaceneroLayoutComponent, 
   children: [
     {
       path: '',
@@ -117,19 +122,23 @@ export const routes: Routes = [
     },
     {
       path: 'dashboard',
-      component: DashboardAlmaceneroComponent // O el nombre exacto de tu componente
+      component: DashboardAlmaceneroComponent 
     },
     {
       path: 'productos',
-      component: Productos // Tu componente de gestión de inventario/productos
+      component: Productos 
     },
     {
       path: 'proveedores',
-      component: Proveedores // Tu componente de gestión de inventario/productos
+      component: Proveedores 
     },
     {
         path: 'movimientos-inventario',
         component: MovimientosInventarioComponent
+    },
+    {
+        path: 'categorias',
+        component: Categorias
     }
   ]
 }

@@ -3,7 +3,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold text-dark">Gestión de Usuarios</h2>
     <button class="btn btn-primary px-4" (click)="abrirModal()">
-      + Nuevo Usuario
+       Nuevo Usuario
     </button>
   </div>
 
@@ -73,7 +73,7 @@
             } @empty {
               <tr>
                 <td colspan="6" class="text-center text-muted py-4">
-                  ❌ No se encontraron usuarios que coincidan con la búsqueda.
+                  No se encontraron usuarios que coincidan con la búsqueda.
                 </td>
               </tr>
             }
@@ -103,7 +103,7 @@
       
       <div class="modal-header bg-light">
         <h5 class="modal-title fw-bold text-dark">
-          {{ modoEdicion ? '📝 Editar Usuario' : '👤 Nuevo Usuario' }}
+          {{ modoEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}
         </h5>
         <button type="button" class="btn-close" (click)="cerrarModal()"></button>
       </div>

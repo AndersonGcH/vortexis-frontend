@@ -3,7 +3,7 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="text-dark fw-bold">Gestión de Productos</h2>
     <button class="btn btn-primary px-4" (click)="abrirModal()">
-      + Agregar Producto
+      Agregar Producto
     </button>
   </div>
 
@@ -72,7 +72,7 @@
             } @empty {
               <tr>
                 <td colspan="8" class="text-center text-muted py-4">
-                  ❌ No se encontraron productos que coincidan con la búsqueda.
+                  No se encontraron productos que coincidan con la búsqueda.
                 </td>
               </tr>
             }
@@ -99,7 +99,7 @@
           
           <div class="modal-header bg-light">
             <h5 class="modal-title fw-bold text-dark">
-              {{ modoEdicion ? '📝 Editar Producto' : '📦 Nuevo Producto' }}
+              {{ modoEdicion ? 'Editar Producto' : 'Nuevo Producto' }}
             </h5>
             <button type="button" class="btn-close" (click)="cerrarModal()"></button>
           </div>

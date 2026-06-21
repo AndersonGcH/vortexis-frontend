@@ -2,12 +2,39 @@
   
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="text-dark fw-bold mb-1">📋 Historial General de Ventas</h2>
+      <h2 class="text-dark fw-bold mb-1">Historial General de Ventas</h2>
       <p class="text-muted small mb-0">Auditoría en tiempo real de transacciones y comprobantes electrónicos.</p>
     </div>
     <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="cargarVentas()">
-      🔄 Sincronizar Base de Datos
+      Sincronizar Base de Datos
     </button>
+  </div>
+
+  <div class="row g-3 mb-3 align-items-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="input-group shadow-sm" style="border-radius: 8px; overflow: hidden;">
+        <span class="input-group-text bg-white border-end-0 text-muted py-2">🔍</span>
+        <input 
+          type="text" 
+          class="form-control border-start-0 shadow-none py-2" 
+          placeholder="Buscar por ID, cliente o encargado..." 
+          [(ngModel)]="textoBuscar"
+          (input)="aplicarFiltros()"
+        />
+      </div>
+    </div>
+    
+    <div class="col-md-4 col-lg-3">
+      <select 
+        class="form-select shadow-sm py-2" 
+        style="border-radius: 8px;"
+        [(ngModel)]="metodoSeleccionado"
+        (change)="aplicarFiltros()">
+        <option value="">Todos los métodos de pago</option>
+        <option value="EFECTIVO">EFECTIVO</option>
+        <option value="YAPE">YAPE</option>
+      </select>
+    </div>
   </div>
 
   <div class="card shadow-sm border-0 mb-4">
@@ -22,14 +49,15 @@
               <th style="width: 20%">Vendedor Encargado</th>
               <th style="width: 12%" class="text-center">Método</th>
               <th style="width: 12%" class="text-end">Total Facturado</th>
-              <th style="width: 12%" class="text-center">Acciones</th> </tr>
+              <th style="width: 12%" class="text-center">Acciones</th>
+            </tr>
           </thead>
           <tbody>
-            @for (venta of ventas; track venta.id) {
+            @for (venta of (ventasFiltradas | paginate: { itemsPerPage: 10, currentPage: paginaActual }); track venta.id) {
               <tr [ngClass]="{'table-primary fw-semibold': ventaSeleccionada?.id === venta.id}">
                 <td><span class="badge bg-light text-dark border fw-bold">#{{ venta.id }}</span></td>
                 <td class="text-secondary small">{{ venta.fecha | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-                <td><strong>{{ venta.cliente?.nombres || 'Público General 👥' }}</strong></td>
+                <td><strong>{{ venta.cliente?.nombres || 'Público General ' }}</strong></td>
                 <td>{{ venta.usuario.nombre }}</td>
                 <td class="text-center">
                   <span class="badge" 
@@ -45,17 +73,17 @@
                 <td class="text-end fw-bold text-success text-nowrap">S/ {{ venta.total.toFixed(2) }}</td>
                 <td class="text-center text-nowrap">
                   <button class="btn btn-primary btn-sm px-2 rounded-pill shadow-sm me-1" (click)="verDetalle(venta)">
-                    👁️ Ver
+                    Ver
                   </button>
                   <button class="btn btn-danger btn-sm px-2 rounded-pill shadow-sm" (click)="descargarPdf(venta.id)">
-                    📄 PDF
+                    PDF
                   </button>
                 </td>
               </tr>
             } @empty {
               <tr>
                 <td colspan="7" class="text-center text-muted py-5">
-                  No se registran comprobantes en el sistema.
+                  No se encontraron comprobantes con los criterios de búsqueda establecidos.
                 </td>
               </tr>
             }
@@ -65,11 +93,19 @@
     </div>
   </div>
 
+  <div class="d-flex justify-content-center mb-4">
+    <pagination-controls
+      (pageChange)="paginaActual = $event"
+      previousLabel="Anterior"
+      nextLabel="Siguiente">
+    </pagination-controls>
+  </div>
+
   @if (ventaSeleccionada) {
     <div class="card shadow border-primary animate-fade-in">
       
       <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
-        <h4 class="mb-0 fs-5 fw-bold">📄 Desglose de Comprobante: Venta #{{ ventaSeleccionada.id }}</h4>
+        <h4 class="mb-0 fs-5 fw-bold">Desglose de Comprobante: Venta #{{ ventaSeleccionada.id }}</h4>
         <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="cerrarDetalle()"></button>
       </div>
       
